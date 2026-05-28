@@ -1,0 +1,31 @@
+# === IA & Agentes Autônomos (Proteção de Propriedade Intelectual) ===
+.agents/
+.codex/
+.codex*
+
+# === Ferramentas de Migração/Upgrade ===
+.github/modernize/
+
+# === Padrão Java / Maven ===
+target/
+*.class
+*.mart
+*.db
+log/
+*.log
+
+# === Configurações de IDE (Locais) ===
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# === Arquivos do Sistema e Variáveis de Ambiente ===
+.env
+.env.local
+.env.*.local
+.DS_Store
+Thumbs.db

@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: riseflow
+      POSTGRES_USER: riseflow
+      POSTGRES_PASSWORD: riseflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    environment:
+      RABBITMQ_DEFAULT_USER: riseflow
+      RABBITMQ_DEFAULT_PASS: riseflow
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0
+    command: start-dev --import-realm
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./infra/keycloak/realm-riseflow.json:/opt/keycloak/data/import/realm-riseflow.json:ro
+
+volumes:
+  postgres-data:
