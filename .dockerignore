@@ -1,0 +1,9 @@
+**/target/
+**/*.log
+.git/
+.github/modernize/
+.agents/
+.codex/
+.vscode/
+.idea/
+*.md

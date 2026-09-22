@@ -193,8 +193,8 @@ class PipelineDealIntegrationTest {
                                 .jwt(t -> t.claim("tenant_id", tenantId.toString()))
                                 .authorities(new SimpleGrantedAuthority("SCOPE_deal:read"))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].title", equalTo("Deal in A")));
+                .andExpect(jsonPath("$.content", hasSize(1)))
+                .andExpect(jsonPath("$.content[0].title", equalTo("Deal in A")));
     }
 
     @Test
@@ -219,8 +219,8 @@ class PipelineDealIntegrationTest {
                                 .jwt(t -> t.claim("tenant_id", tenantA.toString()))
                                 .authorities(new SimpleGrantedAuthority("SCOPE_deal:read"))))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].title", equalTo("Deal of A")));
+                .andExpect(jsonPath("$.content", hasSize(1)))
+                .andExpect(jsonPath("$.content[0].title", equalTo("Deal of A")));
     }
 
     @Test

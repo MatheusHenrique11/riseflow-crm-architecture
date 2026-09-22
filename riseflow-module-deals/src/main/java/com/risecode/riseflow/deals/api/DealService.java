@@ -3,6 +3,7 @@ package com.risecode.riseflow.deals.api;
 import com.risecode.riseflow.accounts.customfields.domain.CustomFieldDefinition;
 import com.risecode.riseflow.accounts.customfields.domain.FieldType;
 import com.risecode.riseflow.accounts.customfields.persistence.CustomFieldDefinitionRepository;
+import com.risecode.riseflow.core.dto.PageResponse;
 import com.risecode.riseflow.core.exception.BusinessException;
 import com.risecode.riseflow.core.exception.EntityNotFoundException;
 import com.risecode.riseflow.core.exception.TenantMismatchException;
@@ -22,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,7 +73,8 @@ public class DealService {
     }
 
     @Transactional(readOnly = true)
-    public List<DealResponse> listDeals(UUID pipelineId, UUID stageId, UUID responsibleId, DealStatus status) {
+    public PageResponse<DealResponse> listDeals(
+            UUID pipelineId, UUID stageId, UUID responsibleId, DealStatus status, int page, int size) {
         UUID tenantId = TenantContextHolder.requireTenantId();
         Specification<Deal> spec = (root, query, cb) -> cb.equal(root.get("tenantId"), tenantId);
         if (pipelineId != null) {
@@ -85,7 +89,13 @@ public class DealService {
         if (status != null) {
             spec = spec.and((root, query, cb) -> cb.equal(root.get("status"), status));
         }
-        return dealRepository.findAll(spec).stream().map(this::toResponse).toList();
+        Page<Deal> result = dealRepository.findAll(spec, PageRequest.of(page, size));
+        return new PageResponse<>(
+                result.getContent().stream().map(this::toResponse).toList(),
+                result.getNumber(),
+                result.getSize(),
+                result.getTotalElements(),
+                result.getTotalPages());
     }
 
     @Transactional

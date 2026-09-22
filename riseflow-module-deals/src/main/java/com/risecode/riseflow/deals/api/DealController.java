@@ -1,12 +1,15 @@
 package com.risecode.riseflow.deals.api;
 
+import com.risecode.riseflow.core.dto.PageResponse;
 import com.risecode.riseflow.deals.domain.DealStatus;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Validated
 @RestController
 @RequestMapping("/api/v1/deals")
 public class DealController {
@@ -42,12 +46,14 @@ public class DealController {
 
     @GetMapping
     @PreAuthorize("hasAuthority('SCOPE_deal:read')")
-    List<DealResponse> list(
+    PageResponse<DealResponse> list(
             @RequestParam(required = false) UUID pipelineId,
             @RequestParam(required = false) UUID stageId,
             @RequestParam(required = false) UUID responsibleId,
-            @RequestParam(required = false) DealStatus status) {
-        return dealService.listDeals(pipelineId, stageId, responsibleId, status);
+            @RequestParam(required = false) DealStatus status,
+            @RequestParam(defaultValue = "0") @Min(0) int page,
+            @RequestParam(defaultValue = "20") @Min(1) @Max(200) int size) {
+        return dealService.listDeals(pipelineId, stageId, responsibleId, status, page, size);
     }
 
     @PutMapping("/{id}")
