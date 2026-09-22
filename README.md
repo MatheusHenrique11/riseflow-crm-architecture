@@ -29,8 +29,8 @@ http://localhost:8080/swagger-ui.html
 - `riseflow-module-tenant`: tenant CRUD and public schema master data.
 - `riseflow-module-accounts`: tenant-aware account CRUD.
 - `riseflow-module-deals`: pipeline and deal tracking — pipeline CRUD with default-pipeline logic, ordered stages with probability, deal lifecycle (create, update, move between stages), status derivation (OPEN/WON/LOST from stage probability), deal filtering by pipeline/stage/responsible/status, and custom field validation reusing accounts definitions.
-- `riseflow-module-marketing`: scaffold module for campaigns and automation.
-- `riseflow-module-commercial`: scaffold module for invoices, proposals, contracts.
+- `riseflow-module-marketing`: campaigns with status lifecycle, email templates, automation rules triggered by CRM events, and multi-step sequences with enrollment/execution tracking; email and WhatsApp senders are logging stubs pending real provider integration.
+- `riseflow-module-commercial`: invoices and proposals with line items and status lifecycles, commission calculation, a scheduled overdue-invoice checker, and a `PaymentGateway` abstraction with a logging stub pending a real provider (e.g. Stripe) integration.
 - `riseflow-api`: Spring Boot application aggregating all modules.
 
 ## Testing

@@ -1,6 +1,26 @@
 {
   "realm": "riseflow",
   "enabled": true,
+  "clientScopes": [
+    { "name": "account:read", "protocol": "openid-connect" },
+    { "name": "account:write", "protocol": "openid-connect" },
+    { "name": "commission:read", "protocol": "openid-connect" },
+    { "name": "commission:write", "protocol": "openid-connect" },
+    { "name": "custom-field:read", "protocol": "openid-connect" },
+    { "name": "custom-field:write", "protocol": "openid-connect" },
+    { "name": "deal:read", "protocol": "openid-connect" },
+    { "name": "deal:write", "protocol": "openid-connect" },
+    { "name": "invoice:read", "protocol": "openid-connect" },
+    { "name": "invoice:write", "protocol": "openid-connect" },
+    { "name": "marketing:read", "protocol": "openid-connect" },
+    { "name": "marketing:write", "protocol": "openid-connect" },
+    { "name": "pipeline:read", "protocol": "openid-connect" },
+    { "name": "pipeline:write", "protocol": "openid-connect" },
+    { "name": "proposal:read", "protocol": "openid-connect" },
+    { "name": "proposal:write", "protocol": "openid-connect" },
+    { "name": "tenant:read", "protocol": "openid-connect" },
+    { "name": "tenant:write", "protocol": "openid-connect" }
+  ],
   "clients": [
     {
       "clientId": "riseflow-api",
@@ -11,6 +31,17 @@
       "serviceAccountsEnabled": true,
       "directAccessGrantsEnabled": true,
       "redirectUris": ["http://localhost:8080/*"],
+      "defaultClientScopes": [
+        "account:read", "account:write",
+        "commission:read", "commission:write",
+        "custom-field:read", "custom-field:write",
+        "deal:read", "deal:write",
+        "invoice:read", "invoice:write",
+        "marketing:read", "marketing:write",
+        "pipeline:read", "pipeline:write",
+        "proposal:read", "proposal:write",
+        "tenant:read", "tenant:write"
+      ],
       "protocolMappers": [
         {
           "name": "tenant_id",

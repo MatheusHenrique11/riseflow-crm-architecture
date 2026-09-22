@@ -14,27 +14,28 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/**
+ * Resolves the active tenant strictly from the {@code tenant_id} claim of the authenticated,
+ * signed JWT. The tenant MUST NOT be taken from a client-supplied request header: doing so would
+ * let any authenticated caller impersonate another tenant simply by setting that header,
+ * bypassing tenant isolation entirely (the JWT is issued and signed by Keycloak, so its claims
+ * cannot be forged by the caller).
+ */
 @Component
 public class TenantContextFilter extends OncePerRequestFilter {
-    static final String TENANT_HEADER = "X-Tenant-ID";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            resolveTenantId(request);
+            resolveTenantId();
             filterChain.doFilter(request, response);
         } finally {
             TenantContextHolder.clear();
         }
     }
 
-    private void resolveTenantId(HttpServletRequest request) {
-        String headerTenantId = request.getHeader(TENANT_HEADER);
-        if (headerTenantId != null && !headerTenantId.isBlank()) {
-            TenantContextHolder.setTenantId(UUID.fromString(headerTenantId));
-            return;
-        }
+    private void resolveTenantId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication instanceof JwtAuthenticationToken jwtAuthentication) {
             Jwt jwt = jwtAuthentication.getToken();

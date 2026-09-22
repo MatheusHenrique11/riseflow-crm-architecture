@@ -32,11 +32,6 @@ spring:
         jwt:
           issuer-uri: http://localhost:8081/realms/riseflow
 
-riseflow:
-  multitenancy:
-    schema-prefix: tenant_
-    default-schema: public
-
 springdoc:
   swagger-ui:
     path: /swagger-ui.html

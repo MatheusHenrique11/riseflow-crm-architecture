@@ -7,6 +7,7 @@ import com.risecode.riseflow.core.repository.BaseRepository;
 import com.risecode.riseflow.core.tenant.TenantContextHolder;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
 public abstract class BaseService<T extends TenantAwareEntity> {
@@ -33,9 +34,11 @@ public abstract class BaseService<T extends TenantAwareEntity> {
     @Transactional(readOnly = true)
     public List<T> list() {
         UUID tenantId = TenantContextHolder.requireTenantId();
-        return repository.findAll().stream()
-                .filter(entity -> tenantId.equals(entity.getTenantId()))
-                .toList();
+        return repository.findAll(byTenantId(tenantId));
+    }
+
+    private Specification<T> byTenantId(UUID tenantId) {
+        return (root, query, cb) -> cb.equal(root.get("tenantId"), tenantId);
     }
 
     @Transactional
